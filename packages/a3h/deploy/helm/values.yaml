@@ -1,0 +1,63 @@
+# Helm Chart Values for Enterprise A3H Autonomous Agent Fleet
+replicaCount: 3
+
+image:
+  repository: deepseek-harness/a3h
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 75
+  targetMemoryUtilizationPercentage: 80
+
+resources:
+  limits:
+    cpu: 4000m
+    memory: 8Gi
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+fleet:
+  warmPoolSize: 5
+  egressAllowlist:
+    - registry.npmjs.org
+    - github.com
+    - api.github.com
+  router:
+    defaultTier: level_2_implementation
+    enablePrefixCache: true
+  governance:
+    costCeilingUSD: 50.00
+    maxTurns: 30
+    leaseTimeoutSeconds: 30
+
+networkPolicy:
+  enabled: true
+  egress:
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - port: 5432
+        - port: 6379
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - port: 443

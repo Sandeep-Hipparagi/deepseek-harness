@@ -1,0 +1,20 @@
+- insert:
+    - id: a3h
+      name: '@deepseek-harness/a3h'
+      config:
+        allowHostFallback: false
+        preWarmedPoolSize: 2
+        egressProxyEnabled: false
+- id: llm-deepseek
+  config:
+    protocol: chat-completions
+    baseURL: http://127.0.0.1:11434/v1
+    apiKeyEnv: DUMMY_LOCAL_KEY
+    reasoningEffort: off
+    models:
+      - id: llama3.1:8b
+        name: Llama 3.1 8B (Ollama Local)
+        contextWindow: 131072
+        maxTokens: 8192
+        inputModalities:
+          - text

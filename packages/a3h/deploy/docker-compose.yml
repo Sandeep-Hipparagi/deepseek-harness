@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  a3h-orchestrator:
+    image: deepseek-harness/a3h:latest
+    container_name: a3h-orchestrator
+    command: ["node", "packages/a3h/bin/a3h.mjs", "watch"]
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://a3h-redis:6379
+      - DATABASE_URL=postgres://a3h_user:secret@a3h-db:5432/a3h_fleet
+      - AGENT_EGRESS_ALLOWLIST=registry.npmjs.org,github.com,api.github.com
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - a3h-workspace-data:/workspace
+      - a3h-agent-knowledge:/workspace/.agent
+    ports:
+      - "8080:8080"
+    depends_on:
+      - a3h-redis
+      - a3h-db
+    networks:
+      - a3h-internal
+
+  a3h-redis:
+    image: redis:7-alpine
+    container_name: a3h-redis
+    restart: always
+    volumes:
+      - a3h-redis-data:/data
+    networks:
+      - a3h-internal
+
+  a3h-db:
+    image: postgres:16-alpine
+    container_name: a3h-db
+    restart: always
+    environment:
+      - POSTGRES_USER=a3h_user
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=a3h_fleet
+    volumes:
+      - a3h-db-data:/var/lib/postgresql/data
+    networks:
+      - a3h-internal
+
+networks:
+  a3h-internal:
+    driver: bridge
+
+volumes:
+  a3h-workspace-data:
+  a3h-agent-knowledge:
+  a3h-redis-data:
+  a3h-db-data:

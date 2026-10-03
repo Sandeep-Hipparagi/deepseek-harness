@@ -1,0 +1,23 @@
+{
+  "name": "@deepseek-harness/a3h",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "a3h": "./bin/a3h.mjs"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "watch": "tsc -b -w"
+  },
+  "dependencies": {
+    "cordis": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.10",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0"
+  }
+}
