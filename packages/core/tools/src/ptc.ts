@@ -548,6 +548,7 @@ export function createRunCodeTool(registry: ToolRuntime, options: RunCodeBridgeO
         }
         type DispatchOutcome = { isError: true; message: string } | { isError: false; value: JsonValue }
         const scheduler = registry[TOOL_RUNTIME_SCHEDULER]
+          ?? (registry as unknown as Record<symbol, ToolRuntimeScheduler>)[Symbol.for('@deepseek-ai/dsh-tools.scheduler')]
         const outcome = await new Promise<DispatchOutcome>((resolve, reject) => {
           // Set by the dispatch stage (or start() for a pre-settled result): what commit() finalizes in submission order.
           let parked:

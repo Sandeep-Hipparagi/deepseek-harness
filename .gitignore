@@ -47,3 +47,12 @@ worktrees/
 .agents/worktrees/
 .typert-*/
 native/system/test/bin/
+
+# A3H local data, SQLite databases, and agent artifacts
+.a3h-data/
+packages/a3h/.a3h-data/
+packages/a3h/dist/
+.agent/
+packages/a3h/.agent/
+*.sqlite
+*.sqlite-*
