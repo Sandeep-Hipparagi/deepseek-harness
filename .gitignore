@@ -56,3 +56,12 @@ packages/a3h/dist/
 packages/a3h/.agent/
 *.sqlite
 *.sqlite-*
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Harness databases and ephemeral cache
+.harness/
+*.db
